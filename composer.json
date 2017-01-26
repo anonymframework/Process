@@ -1,0 +1,19 @@
+{
+    "name": "sagi/task",
+    "description": "Sagi multiple task repository",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "anonymframework",
+            "email": "vahit.serif119@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Sagi\\Task\\": "src/"
+        }
+    },
+    "require": {}
+}
