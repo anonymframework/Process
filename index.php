@@ -5,20 +5,34 @@
  */
 include "vendor/autoload.php";
 
-$childProcess = new \Sagi\Process\Process(function ($name){
-   echo 'hello i am '. $name. " and i am in child process";
+$process = new \Sagi\Process\OpenProcess(__FILE__, $argc, $argv);
+
+$process->addProcess('test', function () {
+    echo 'test method called';
 });
 
-$parentProcess = new \Sagi\Process\Process(function (){
-   echo "hello i am parent process";
+
+$process->addProcess('do', function () {
+    $fork = new \Sagi\Process\ForkProcess();
+
+    $chield = new \Sagi\Process\Process(function () {
+        echo "called child";
+    });
+
+    $parent = new \Sagi\Process\Process(function () {
+        echo "called parent";
+    });
+
+    $fork->setChildProcess($chield)
+        ->setParentProcess($parent);
+
+    $fork->run();
+
+    echo "called do";
 });
 
-$fork = new \Sagi\Process\ForkProcess($parentProcess, $childProcess);
+$process->run();
 
-$fork->start();
+$process->runProcess('do');
 
-$fork->setChildParameters(array(
-    'name' => 'test'
-));
-
-$fork->run();
+echo $process->getResult('do');

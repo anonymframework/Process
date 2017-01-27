@@ -60,7 +60,7 @@ class ForkProcess implements ProcesserInterface
      * @param ProcessInterface $parentProcess
      * @return ForkProcess
      */
-    public function setParentProcess(ProcessInterface $parentProcess)
+    public function setParentProcess(ProcessInterface $parentProcess = null)
     {
         $this->parentProcess = $parentProcess;
         return $this;
@@ -78,7 +78,7 @@ class ForkProcess implements ProcesserInterface
      * @param ProcessInterface $childProcess
      * @return ForkProcess
      */
-    public function setChildProcess(ProcessInterface $childProcess)
+    public function setChildProcess(ProcessInterface $childProcess = null)
     {
         $this->childProcess = $childProcess;
         return $this;
