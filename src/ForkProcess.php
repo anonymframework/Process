@@ -21,7 +21,7 @@ class ForkProcess implements ProcesserInterface
     /**
      * @var array
      */
-    protected $parentParameters;
+    protected $parentParameters = [];
 
     /**
      * @var callable
@@ -31,7 +31,12 @@ class ForkProcess implements ProcesserInterface
     /**
      * @var array
      */
-    protected $childParameters;
+    protected $childParameters = [];
+
+    /**
+     * @var int
+     */
+    protected $pid;
     /**
      * ForkProcess constructor.
      * @param ProcessInterface|null $parentProcess
@@ -44,7 +49,7 @@ class ForkProcess implements ProcesserInterface
 
 
     /**
-     * @return callable
+     * @return ProcessInterface
      */
     public function getParentProcess()
     {
@@ -62,7 +67,7 @@ class ForkProcess implements ProcesserInterface
     }
 
     /**
-     * @return callable
+     * @return ProcessInterface
      */
     public function getChildProcess()
     {
@@ -117,18 +122,36 @@ class ForkProcess implements ProcesserInterface
 
 
     /**
-     * @return mixed
+     *
+     * @throws ForkException
+     * @return ForkProcess
      */
     public function start()
     {
+        if (!function_exists('pcntl_fork')) {
+            throw new ForkException('ForkProcess only works in cgi mode');
+        }
 
+        $this->pid = pcntl_fork();
+
+        return $this;
     }
 
     /**
-     * @return mixed
+     * @throws ForkException
      */
     public function run()
     {
+        if ($this->pid === -1) {
+            $error = pcntl_strerror(pcntl_get_last_error());
 
+            throw new ForkException(sprintf('Something went wrong, error : %s', $error));
+        }elseif($this->pid === 0){
+            $this->getChildProcess()->run($this->getChildParameters());
+        }else{
+            $this->getParentProcess()->run($this->getParentParameters());
+
+            pcntl_wait($status);
+        }
     }
 }
