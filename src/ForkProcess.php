@@ -14,7 +14,7 @@ class ForkProcess implements ProcesserInterface
 {
 
     /**
-     * @var callable
+     * @var ProcessInterface
      */
     protected $parentProcess;
 
@@ -24,7 +24,7 @@ class ForkProcess implements ProcesserInterface
     protected $parentParameters = [];
 
     /**
-     * @var callable
+     * @var ProcessInterface
      */
     protected $childProcess;
 

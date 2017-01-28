@@ -12,12 +12,6 @@ namespace Sagi\Process;
  */
 class OpenProcess
 {
-
-    /**
-     * @var array<resource>
-     */
-    protected $results;
-
     /**
      * @var string
      */
@@ -31,23 +25,25 @@ class OpenProcess
     /**
      * @var int
      */
-    protected $argc;
+    protected $argc = 1;
 
     /**
      * @var array
      */
-    protected $argv;
+    protected $argv = [];
 
     /**
      * OpenProcess constructor.
      * @param string $path
-     * @param int $argc
-     * @param array $argv
+
      */
-    public function __construct($path = __FILE__, $argc = 0, $argv = [])
+    public function __construct($path = __FILE__)
     {
-        $this->argc = $argc;
-        $this->argv = $argv;
+        if (isset($_SERVER['argv'])) {
+            $this->argc = $_SERVER['argc'];
+            $this->argv = $_SERVER['argv'];
+        }
+
 
         $this->setScriptPath($path);
     }
@@ -82,17 +78,9 @@ class OpenProcess
 
     /**
      * @param $name
-     * @return bool|string
+     * @return bool|ProcessResult
      */
-    public function getResult($name){
-        if (isset($this->results[$name])) {
-            return stream_get_contents($this->results[$name]);
-        }
-
-        return false;
-    }
-
-    public function runProcess($name)
+    public function execProcess($name)
     {
         if ($this->argc === 1) {
             if (version_compare(PHP_VERSION, '5.4.0', '>')) {
@@ -101,12 +89,16 @@ class OpenProcess
                 $php = 'php';
             }
 
+            if ($php === '') {
+                $php = 'php';
+            }
+
             $cont = popen(sprintf('%s %s --run %s', $php, $this->getScriptPath(), $name), 'r');
 
-            $this->results[$name] = $cont;
+            return new ProcessResult($cont);
+        }else{
+            return new ProcessResult();
         }
-
-        return $this;
     }
 
     /**

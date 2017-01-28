@@ -4,35 +4,21 @@
  *
  */
 include "vendor/autoload.php";
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-$process = new \Sagi\Process\OpenProcess(__FILE__, $argc, $argv);
+$process = new \Sagi\Process\OpenProcess(__FILE__);
 
-$process->addProcess('test', function () {
-    echo 'test method called';
+$process->addProcess('do', function (){
+    echo 'do something';
 });
 
-
-$process->addProcess('do', function () {
-    $fork = new \Sagi\Process\ForkProcess();
-
-    $chield = new \Sagi\Process\Process(function () {
-        echo "called child";
-    });
-
-    $parent = new \Sagi\Process\Process(function () {
-        echo "called parent";
-    });
-
-    $fork->setChildProcess($chield)
-        ->setParentProcess($parent);
-
-    $fork->run();
-
-    echo "called do";
+$process->addProcess('test', function (){
+    for($i = 0; $i < 100; $i++){
+        echo $i;
+    }
 });
+
 
 $process->run();
-
-$process->runProcess('do');
-
-echo $process->getResult('do');
