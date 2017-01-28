@@ -12,7 +12,6 @@ namespace Sagi\Process;
  */
 interface ProcesserInterface
 {
-
     /**
      * @return mixed
      */

@@ -77,6 +77,4 @@ class Process implements ProcessInterface
         $this->result = $result;
         return $this;
     }
-
-
 }

@@ -11,4 +11,3 @@ namespace Sagi\Process;
  * @package Sagi\Process
  */
 class ForkException extends \Exception{}
-

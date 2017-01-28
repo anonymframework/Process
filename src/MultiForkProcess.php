@@ -6,7 +6,10 @@
 
 namespace Sagi\Process;
 
-
+/**
+ * Class MultiForkProcess
+ * @package Sagi\Process
+ */
 class MultiForkProcess
 {
 
@@ -44,5 +47,4 @@ class MultiForkProcess
         $this->processes = $processes;
         return $this;
     }
-
 }

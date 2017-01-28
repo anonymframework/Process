@@ -6,7 +6,10 @@
 
 namespace Sagi\Process;
 
-
+/**
+ * Interface ProcessInterface
+ * @package Sagi\Process
+ */
 interface ProcessInterface
 {
     /**
@@ -14,5 +17,4 @@ interface ProcessInterface
      * @return mixed
      */
     public function run(array $parameters);
-
 }

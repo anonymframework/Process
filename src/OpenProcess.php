@@ -153,4 +153,3 @@ class OpenProcess
         return $this;
     }
 }
-
